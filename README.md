@@ -1,15 +1,12 @@
-![Logo](./client/src/media/logo.svg)
-
 ![Statements](https://img.shields.io/badge/statements-43.64%25-red.svg?style=flat)
 ![Branches](https://img.shields.io/badge/branches-14.09%25-red.svg?style=flat)
 ![Functions](https://img.shields.io/badge/functions-28%25-red.svg?style=flat)
 ![Lines](https://img.shields.io/badge/lines-44.2%25-red.svg?style=flat)
 
-> eCommerce platform built with MERN stack (MongoDB, ExpressJS, ReactJS, Nodejs)
+> eCommerce platform built with MySQL, Spring, ReactJS, Nodejs
 
 
 ## Table of Contents
-
 
 - [Table of Contents](#table-of-contents)
 - [Demo videos](#demo-videos)
@@ -31,18 +28,13 @@
 - [License](#license)
 
 ## Demo videos
-- [Part 1](https://user-images.githubusercontent.com/53460339/140501784-83cb14e9-0ecf-48fa-b1be-781cdf9ec593.mp4)
-- [Part 2](https://user-images.githubusercontent.com/53460339/140501930-a563c18e-6a97-41ad-83fd-65b9893acc79.mp4)
-- [Part 3](https://user-images.githubusercontent.com/53460339/140644284-bb325354-6b49-4418-b0f3-04a2391b65de.mp4)
+
 ## Purpose
+
 The purpose of the application is to provide an e-commerce platform for consumers and vendors to buy & sell products. It takes inspiration on modern applications like eBay or Amazon. Data sources are self-generated, but they conform to some schema from Amazon products datasets [[1](https://data.world/promptcloud/fashion-products-on-amazon-com.)], [[2](https://data.world/promptcloud/amazon-product-listing)], [[3](https://jmcauley.ucsd.edu/data/amazon/)].
 
-
-
-
-
 ## Project URL:
-https://comp3120-shopology.herokuapp.com
+
 ## Features
 
 - Full featured shopping cart
@@ -195,26 +187,30 @@ You can open the file _coverage/lcov-report/index.html_ to have better visualiza
 
 
 ## Future implementations
+
 1. Recommendation system for shoppers
 2. Social login using third-party vendors like Google, Facebook
 
 
 ## Roles
-<!-- 1. Van Nguyen Nguyen - front end developer
-2. Sujith Bellam - front end developer
-3. Sepehr Torfeh Nejad - back end developer
-4. Canh Thanh Nguyen - back end developer
+
+1. Luong Dinh Khang - front end developer
+2. Luong Vi Phu - front end developer
+3. Le Phuoc Dat - back end developer
+4. Nguyen Cong Dinh - back end developer
 5. Communications and collaboration:\
    i. The team had weekly meetings to discuss features to implement, and go over presentation for sprints\
-   ii. Pull requests are reviewed by at least 1 other team member. Merge conflicts are promptly resolved. -->
+   ii. Pull requests are reviewed by at least 1 other team member. Merge conflicts are promptly resolved.
+   
 ## Deployment
+
 - [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md)
 
 ## License
 
 MIT License
 
-Copyright (c) 2021
+Copyright (c) 2022
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -233,5 +229,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
- 
