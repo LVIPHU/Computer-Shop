@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="thymeleaf.org">
+<head th:replace="common/web/head::head('Information')">
+</head>
+<body>
+	<!-- HEADER -->
+	<header th:replace="common/web/header::header"></header>
+	<!-- /HEADER -->
+
+	<!-- NAVIGATION -->
+	<nav id="navigation" th:replace="common/web/navigation::navigation">
+	</nav>
+	<!-- /NAVIGATION -->
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Trang lịch sử</h3>
+					<ul class="breadcrumb-tree">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li class="active">Lịch sử mua hàng</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- SECTION -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<form action="/bill/filter">
+				<div class="form-group">
+					<label for="startDate" class="col-sm-2 col-form-label">Từ</label> <input
+						data-date-format="mm/yyyy" type="datetime-local" class="form-control"
+						name="startDate" placeholder="First name">
+				</div>
+				<div class="form-group">
+					<label for="endDate" class="col-sm-2 col-form-label">Đến</label> <input
+						data-date-format="mm/yyyy" type="datetime-local" class="form-control"
+						name="endDate" placeholder="Last name">
+				</div>
+				
+				<button class="btn">Lọc</button>
+			</form>
+			<!-- row -->
+			<div class="row">
+				<table class="table table-bordered">
+					<thead>
+						<tr class="text-center">
+							<th>Ngày mua</th>
+							<th>Địa Chỉ</th>
+							<th>SĐT</th>
+							<th>Chi tiết</th>
+							<th>Ghi Chú</th>
+							<th>Trạng Thái</th>
+							<th>Tổng tiền</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="bill : ${bills}">
+							<tr>
+								<td
+									th:text="${#temporals.format(bill.createDate, 'MM-dd-yyyy')}"></td>
+								<td th:text="${bill.receivedAddress}"></td>
+								<td th:text="${bill.receivedPhoneNo}"></td>
+								<td><a th:href="@{'/bill-detail/'+${bill.id}}"> <span
+										class="fa fa-info-circle">Chi tiết</span></a></td>
+								<td th:text="${bill.note}"></td>
+								<td>
+									<div th:switch="${bill.status.name()}">
+										<span th:case="'DRAFT'" class="badge bg-warning">Chờ
+											xác nhận</span> <span th:case="'CONFIRMED'" class="badge bg-primary">Đã
+											xác nhận</span> <span th:case="'PAID'" class="badge bg-info">Đã
+											thanh toán</span> <span th:case="'COMPLETED'"
+											class="badge bg-success">Đã giao</span> <span
+											th:case="'CANCELED'" class="badge bg-danger">Đã hủy</span> <span
+											th:case="*" class="badge bg-danger">Không trạng thái</span>
+									</div>
+								</td>
+								<td
+									th:text="${#numbers.formatDecimal(bill.amount.longValue(), 3,
+											'COMMA', 0, 'DEFAULT')}+ ' VNĐ'"></td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /SECTION -->
+
+	<!-- NEWSLETTER -->
+	<div th:replace="common/web/footer::newsletter"></div>
+	<!-- /NEWSLETTER -->
+
+	<!-- FOOTER -->
+	<footer th:replace="common/web/footer::footer"></footer>
+
+	<!-- /FOOTER -->
+
+	<div th:replace="common/web/head::script"></div>
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/admin/fragment::head('Danh sách tài khoản')"></head>
+<style>
+span {
+	color: red;
+}
+
+td, th {
+	text-align: center;
+}
+</style>
+
+<body>
+
+	<div id="app">
+    <!-- Menu -->
+		<div th:replace="common/admin/fragment::menu"></div>
+		<!--/ End Menu -->
+		<div id="main">
+			<!-- Header -->
+			<nav th:replace="common/admin/header::header"></nav>
+			<!--/ End Header -->
+
+
+        <div class="gap-sm"></div>
+
+        <form action="./admin-account" method="post">
+		<div class="info-product">
+			<div class="container-fluid">
+				<div class="row ">
+					<div class="col-lg-12 col-md-12 ">
+						<div class="card">
+
+								<div class="alert alert-${alert}" th:if="${message}" role="alert">[[${message}]]
+								</div>
+
+							<div class="card-body">
+								<div class="row row-margin-top">
+									<div class="container-fluid">
+										<ul class="nav nav-tabs" id="myTab" role="tablist">
+											<li class="nav-item"><a class="nav-link active"
+												id="home-tab" data-toggle="tab" href="#home" role="tab"
+												aria-controls="home" aria-selected="true">Tất cả</a></li>
+											<li class="nav-item"><a class="nav-link" id="online-tab"
+												data-toggle="tab" href="#online" role="tab"
+												aria-controls="online" aria-selected="false">Nhân Viên</a></li>
+											<li class="nav-item"><a class="nav-link"
+												id="soldout-tab" data-toggle="tab" href="#soldout"
+												role="tab" aria-controls="soldout" aria-selected="false">Khách
+													Hàng</a></li>
+											<li class="nav-item"><a class="nav-link" id="lock-tab"
+												data-toggle="tab" href="#lock" role="tab"
+												aria-controls="lock" aria-selected="false">Đã tạm khóa</a>
+											<li class="nav-item"><a class="nav-link"
+												href="./admin-account-add">Thêm
+													Tài Khoản</a></li>
+										</ul>
+										<div class="tab-content" id="myTabContent">
+											<div class="tab-pane fade show active" id="home"
+												role="tabpanel" aria-labelledby="home-tab">
+												<div class="container-fluid">
+													<div class="gap-md"></div>
+													<div class="row">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+															<div class="input-group mb-3">
+																<div class="input-group-prepend">
+																	<button
+																		class="btn btn-outline-secondary dropdown-toggle"
+																		type="button" data-toggle="dropdown"
+																		aria-haspopup="true" aria-expanded="false">
+																		Tên tài khoản</button>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item" href="#">Họ và tên</a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" name="search"
+																	aria-label="Text input with dropdown button">
+																<button
+																	class="btn btn-outline-primary btn-custom-timkiem">
+																	Tìm</button>
+															</div>
+														</div>
+													</div>
+													<div class="gap-sm"></div>
+													<div class="row">
+														<div class="col-12">
+															<section class="section">
+																<div class="card">
+																	<!-- all product-tab -->
+																	<div class="card-body">
+																		<table class='table table-striped' id="table1">
+																			<thead>
+																				<tr>
+																					<th style="text-align: center;">Loại tài khoản</th>
+																					<th>Họ tên</th>
+																					<th>Số điện thoại</th>
+																					<th>Email</th>
+																					<th>Trạng Thái</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr th:each="user : ${users}">
+																							<td>
+																								<th:block th:switch="${user.roleId}">
+																									<span th:case="1">NHÂN VIÊN</span>
+																									<span th:case="2">KHÁCH HÀNG</span>
+																								</th:block>
+																							</td>
+																							<td><a
+																								th:href="${'./admin-account-edit?id='+{user.id}}">[[${user.firstName} +' '+ ${user.lastName}]]</a>
+																							</td>
+																							<td>[[${user.phoneNumber}]]</td>
+																							<td>[[${user.email}]]</td>
+																							<td>
+																								<span class="badge bg-success" th:if="${user.status.name() == 'ACTIVED'}">Bình thường</span>
+																								<span class="badge bg-secondary" th:if="${user.status.name() == 'DELETED'}">Tạm khóa</span>
+																							</td>
+																								<td><a href="./admin-account-password?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-primary btn-sm">
+																											<i class="ti-user"></i>
+																										</button></a></td>
+																								<td><a href="./admin-account-edit?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button></a></td>
+																								<td><a href="/admin-account-delete?action=xoa&id=${u.getId()}"><button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button></a></td>
+																						</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</section>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane fade" id="online" role="tabpanel"
+												aria-labelledby="online-tab">
+												<div class="container-fluid">
+													<div class="gap-md"></div>
+													<div class="row">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+															<div class="input-group mb-3">
+																<div class="input-group-prepend">
+																	<button
+																		class="btn btn-outline-secondary dropdown-toggle"
+																		type="button" data-toggle="dropdown"
+																		aria-haspopup="true" aria-expanded="false">
+																		Tên tài khoản</button>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item" href="#">Họ và tên</a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" name="search"
+																	aria-label="Text input with dropdown button">
+																<button
+																	class="btn btn-outline-primary btn-custom-timkiem">
+																	Tìm</button>
+															</div>
+														</div>
+													</div>
+													<div class="gap-sm"></div>
+													<div class="row">
+														<div class="col-12">
+															<section class="section">
+																<div class="card">
+																	<!-- all product-tab -->
+																	<div class="card-body">
+																		<table class='table table-striped' id="table1">
+																			<thead>
+																				<tr>
+																					<th style="text-align: center;">Loại tài khoản</th>
+																					<th>Tên tài khoản</th>
+																					<th>Họ tên</th>
+																					<th>Số điện thoại</th>
+																					<th>Email</th>
+																					<th>Trạng thái</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<c:if test="${not empty user}">
+																					<c:forEach items="${user.getList()}" var="u">
+																						<c:if test="${u.isRole() == 2}">
+																							<tr>
+																								<td>NHÂN VIÊN</td>
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}">${u.getUsername()}</a>
+																								</td>
+																								<td>${u.getName()}</td>
+																								<td>${u.getPhone()}</td>
+																								<td>${u.getEmail()}</td>
+																								<td><span class="badge bg-info">Bình
+																										thường</span></td>
+																								<td><a
+																									href="./admin-account-password?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-primary btn-sm">
+																											<i class="ti-user"></i>
+																										</button></a></td>
+
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button></a></td>
+
+																								<td><a href="./admin-account-delete?action=xoa&id=${u.getId()}"><button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button></a></td>
+																							</tr>
+																						</c:if>
+																					</c:forEach>
+																				</c:if>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</section>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane fade" id="soldout" role="tabpanel"
+												aria-labelledby="soldout-tab">
+												<div class="container-fluid">
+													<div class="gap-md"></div>
+													<div class="row">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+															<div class="input-group mb-3">
+																<div class="input-group-prepend">
+																	<button
+																		class="btn btn-outline-secondary dropdown-toggle"
+																		type="button" data-toggle="dropdown"
+																		aria-haspopup="true" aria-expanded="false">
+																		Tên tài khoản</button>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item" href="#">Họ và tên</a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" name="search"
+																	aria-label="Text input with dropdown button">
+																<button
+																	class="btn btn-outline-primary btn-custom-timkiem">
+																	Tìm</button>
+															</div>
+														</div>
+													</div>
+													<!-- <div class="gap-sm"></div>
+													<div class="row row-product">
+														<div class="col-lg-5 col-md-5 col-sm-5 col-5">
+															<a href="addproduct.html">
+																<button type="button"
+																	class="btn btn-outline-secondary btn-add-product">
+																	<i class="fa fa-plus " aria-hidden="true"></i> Thêm 1
+																	sản phẩm mới
+																</button>
+															</a>
+															<div class="btn-group" role="group">
+																<button id="btnGroupDrop1" type="button"
+																	class="btn btn-outline-secondary dropdown-toggle btn-custom-xu-li"
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false">Công cụ xử lí hàng hoạt
+																</button>
+																<div class="dropdown-menu"
+																	aria-labelledby="btnGroupDrop1">
+																	<a class="dropdown-item" href="#">Đăng hàng loạt</a> <a
+																		class="dropdown-item" href="#">Cập nhật hàng loạt</a>
+																	<a class="dropdown-item" href="#">Cập nhật thuộc
+																		tính</a>
+
+																</div>
+															</div>
+
+														</div>
+													</div> -->
+													<div class="gap-sm"></div>
+													<div class="row">
+														<div class="col-12">
+															<section class="section">
+																<div class="card">
+																	<!-- all product-tab -->
+																	<div class="card-body">
+																		<table class='table table-striped' id="table1">
+																			<thead>
+																				<tr>
+																					<th style="text-align: center;">Loại tài khoản</th>
+																					<th>Tên tài khoản</th>
+																					<th>Họ tên</th>
+																					<th>Số điện thoại</th>
+																					<th>Email</th>
+																					<th>Trạng thái</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<c:if test="${not empty user}">
+																					<c:forEach items="${user.getList()}" var="u">
+																						<c:if test="${u.isRole() == 1}">
+																							<tr>
+																								<td>KHÁCH HÀNG</td>
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}">
+																										${u.getUsername()}</a></td>
+																								<td>${u.getName()}</td>
+																								<td>${u.getPhone()}</td>
+																								<td>${u.getEmail()}</td>
+																								<td><span class="badge bg-success">Bình
+																										thường</span></td>
+																								<td><a
+																									href="./admin-account-password?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-primary btn-sm">
+																											<i class="ti-user"></i>
+																										</button></a></td>
+
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button></a></td>
+
+																								<td><a href="./admin-account-delete?action=xoa&id=${u.getId()}"><button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button></a></td>
+																							</tr>
+																						</c:if>
+																					</c:forEach>
+																				</c:if>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</section>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane fade" id="lock" role="tabpanel"
+												aria-labelledby="lock-tab">
+												<div class="container-fluid">
+													<div class="gap-md"></div>
+													<div class="row">
+														<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+															<div class="input-group mb-3">
+																<div class="input-group-prepend">
+																	<button
+																		class="btn btn-outline-secondary dropdown-toggle"
+																		type="button" data-toggle="dropdown"
+																		aria-haspopup="true" aria-expanded="false">
+																		Tên tài khoản</button>
+																	<div class="dropdown-menu">
+																		<a class="dropdown-item" href="#">Họ và tên</a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" name="search"
+																	aria-label="Text input with dropdown button">
+																<button
+																	class="btn btn-outline-primary btn-custom-timkiem">
+																	Tìm</button>
+															</div>
+														</div>
+													</div>
+													<!-- <div class="gap-sm"></div>
+													<div class="row row-product">
+														<div class="col-lg-5 col-md-5 col-sm-5 col-5">
+															<a href="addproduct.html">
+																<button type="button"
+																	class="btn btn-outline-secondary btn-add-product">
+																	<i class="fa fa-plus " aria-hidden="true"></i> Thêm 1
+																	sản phẩm mới
+																</button>
+															</a>
+															<div class="btn-group" role="group">
+																<button id="btnGroupDrop1" type="button"
+																	class="btn btn-outline-secondary dropdown-toggle btn-custom-xu-li"
+																	data-toggle="dropdown" aria-haspopup="true"
+																	aria-expanded="false">Công cụ xử lí hàng hoạt
+																</button>
+																<div class="dropdown-menu"
+																	aria-labelledby="btnGroupDrop1">
+																	<a class="dropdown-item" href="#">Đăng hàng loạt</a> <a
+																		class="dropdown-item" href="#">Cập nhật hàng loạt</a>
+																	<a class="dropdown-item" href="#">Cập nhật thuộc
+																		tính</a>
+
+																</div>
+															</div>
+
+														</div>
+													</div> -->
+													<div class="gap-sm"></div>
+													<div class="row">
+														<div class="col-12">
+															<section class="section">
+																<div class="card">
+																	<!-- all product-tab -->
+																	<div class="card-body">
+																		<table class='table table-striped' id="table1">
+																			<thead>
+																				<tr>
+																					<th style="text-align: center;">Loại tài khoản</th>
+																					<th>Tên tài khoản</th>
+																					<th>Họ tên</th>
+																					<th>Số điện thoại</th>
+																					<th>Email</th>
+																					<th>Trạng thái</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<c:if test="${not empty user}">
+																					<c:forEach items="${user.getList()}" var="u">
+																						<c:if test="${u.isRole() == 0}">
+																							<tr>
+																								<td>KHÁCH HÀNG</td>
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}">
+																										${u.getUsername()}</a></td>
+																								<td>${u.getName()}</td>
+																								<td>${u.getPhone()}</td>
+																								<td>${u.getEmail()}</td>
+																								<td><span class="badge bg-secondary">Tạm
+																										khóa</span></td>
+																								<td><a
+																									href="./admin-account-password?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-primary btn-sm">
+																											<i class="ti-user"></i>
+																										</button></a></td>
+
+																								<td><a
+																									href="./admin-account-edit?id=${u.getId()}"><button
+																											type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button></a></td>
+
+																								<td><a href="./admin-account-delete?action=xoa&id=${u.getId()}"><button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button></a></td>
+																							</tr>
+																						</c:if>
+																					</c:forEach>
+																				</c:if>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</section>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+    </div>
+</div>
+<div th:replace="common/admin/fragment::script"></div>
+</body>
+
+</html>

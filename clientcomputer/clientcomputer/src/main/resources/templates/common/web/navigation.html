@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<!-- NAVIGATION -->
+	<nav id="navigation" th:fragment="navigation">
+		<!-- container -->
+		<div class="container">
+			<!-- responsive-nav -->
+			<div id="responsive-nav">
+				<!-- NAV -->
+				<ul class="main-nav nav navbar-nav">
+					<li class="active"><a href="#">Trang chủ</a></li>
+					<li><a th:href="@{/product}">Danh mục</a></li>
+					<li th:each="category:${categories}"><a th:href="@{'/product?categoryId='+${category.id}}">[[${category.name}]]</a></li>
+				</ul>
+				<!-- /NAV -->
+			</div>
+			<!-- /responsive-nav -->
+		</div>
+		<!-- /container -->
+	</nav>
+	<!-- /NAVIGATION -->
+</body>
+</html>

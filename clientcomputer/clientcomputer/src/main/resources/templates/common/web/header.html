@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- HEADER -->
+	<header th:fragment="header">
+		<!-- TOP HEADER -->
+		<div id="top-header">
+			<div class="container">
+				<ul class="header-links pull-left">
+					<li><a href="#"><i class="fa fa-phone"></i> +0777-66-43-53</a></li>
+					<li><a href="#"><i class="fa fa-envelope-o"></i>
+							email@email.com</a></li>
+					<li><a href="#"><i class="fa fa-map-marker"></i> 97 Man
+							Thien, Hiệp Phú, TP.Thu Duc, TP.HCM</a></li>
+				</ul>
+				<ul class="header-links pull-right">
+					<li><a href="#"><i>&#8363;</i> VNĐ</a></li>
+					<li><a href="/information" th:if="${session.token}"><i class="fa fa-user-o"></i> My Account</a></li>
+					<li>
+						<a href="/logout" th:if="${session.token}">
+							<i class="fa fa-sign-out" aria-hidden="true"></i> Đăng xuất
+						</a>
+					</li>
+					<li><a th:href="@{/login}" th:unless="${session.token}"><i class="fa fa-user-o"></i> Login</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- /TOP HEADER -->
+
+		<!-- MAIN HEADER -->
+		<div id="header">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- LOGO -->
+					<div class="col-md-3">
+						<div class="header-logo">
+							<a href="../" class="logo"> <img th:src="@{/web/img/logo.png}" alt="">
+							</a>
+						</div>
+					</div>
+					<!-- /LOGO -->
+
+					<!-- SEARCH BAR -->
+					<div class="col-md-6">
+						<div class="header-search">
+							<form action="/product/search" method="get">
+								<select class="input-select" name="category">
+									<option value="">All Categories</option>
+									<option th:each="cate:${categories}" th:value="${cate.id}" th:text="${cate.name}"></option>
+								</select> <input class="input" name="keyword" placeholder="Search here">
+								<button type="submit" class="search-btn">Search</button>
+							</form>
+						</div>
+					</div>
+					<!-- /SEARCH BAR -->
+
+					<!-- ACCOUNT -->
+					<div class="col-md-3 clearfix">
+						<div class="header-ctn">
+							<!-- Wishlist -->
+							<div>
+								<a href="#"> <i class="fa fa-heart-o"></i> <span>Ưa thích</span> <span class="qty" th:if="${wishlist}">2</span>
+								</a>
+							</div>
+							<!-- /Wishlist -->
+
+							<!-- Cart -->
+							<div class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" th:href="@{/cart}"
+									aria-expanded="true"> <i class="fa fa-shopping-cart"></i> <span>Giỏ hàng</span> <span class="qty" th:if="${carts!= null && carts.size()>0}">[[${carts.size()}]]</span>
+								</a>
+								<div class="cart-dropdown" th:if="${carts}">
+									<div class="cart-list">
+										<div class="product-widget" th:each="cart : ${carts}">
+											<div class="product-img">
+												<img th:unless="*{#strings.contains({cart.productImage},'https')}" th:src="*{'data:image/jpeg;base64,'+{cart.productImage}}" alt="">
+												<img th:if="*{#strings.contains({cart.productImage},'https')}" th:src="*{{cart.productImage}}" alt="">
+											</div>
+											<div class="product-body">
+												<h3 class="product-name">
+													<a href="#">[[${cart.productName}]]</a>
+												</h3>
+												<h4 class="product-price">
+													<span class="qty">[[${cart.quantity}]]x</span>[[${#numbers.formatDecimal(cart.price, 1, 'DEFAULT', 0, 'DEFAULT')}+ ' VNĐ']]
+												</h4>
+											</div>
+											<a th:href="@{'/cart/delete/'+${cart.productId}}" class="delete"> <i class="fa fa-close"></i>
+											</a>
+										</div>
+									</div>
+									<div class="cart-summary">
+										<small>[[${totalCartItems}]] Item(s) selected</small>
+										<h5>SUBTOTAL: [[${#numbers.formatDecimal(amount, 1, 'DEFAULT', 0, 'DEFAULT')}+ ' VNĐ']]</h5>
+									</div>
+									<div class="cart-btns">
+										<a href="/cart">View Cart</a> <a href="/checkout">Checkout <i
+											class="fa fa-arrow-circle-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<!-- /Cart -->
+
+							<!-- Menu Toogle -->
+							<div class="menu-toggle">
+								<a href="#"> <i class="fa fa-bars"></i> <span>Menu</span>
+								</a>
+							</div>
+							<!-- /Menu Toogle -->
+						</div>
+					</div>
+					<!-- /ACCOUNT -->
+				</div>
+				<!-- row -->
+			</div>
+			<!-- container -->
+		</div>
+		<!-- /MAIN HEADER -->
+	</header>
+	<!-- /HEADER -->
+</body>
+</html>

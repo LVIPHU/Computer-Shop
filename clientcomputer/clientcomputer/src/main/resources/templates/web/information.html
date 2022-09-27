@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="thymeleaf.org">
+<head th:replace="common/web/head::head('Information')">
+</head>
+<body>
+	<!-- HEADER -->
+	<header th:replace="common/web/header::header"></header>
+	<!-- /HEADER -->
+
+	<!-- NAVIGATION -->
+	<nav id="navigation" th:replace="common/web/navigation::navigation">
+	</nav>
+	<!-- /NAVIGATION -->
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Trang thông tin</h3>
+					<ul class="breadcrumb-tree">
+						<li><a th:href="@{/}">Home</a></li>
+						<li class="active">Thông tin cá nhân</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- SECTION -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12" th:unless="${edit}">
+					<header>
+						<h1>Hồ Sơ Của Tôi</h1>
+						<div class="content">Quản lý thông tin hồ sơ để bảo mật tài
+							khoản</div>
+					</header>
+					<hr>
+					<div class="row">
+						<label class="col-md-3 control-label">Tên</label>
+						<div class="col-lg-6 col-md-9">[[${user.lastName} + ' ' + ${user.firstName}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Email </label>
+						<div class="col-lg-6 col-md-9">[[${user.email}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Giới tính</label>
+						<div class="col-lg-6 col-md-9">[[${user.gender}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Ngày sinh</label>
+						<div class="col-lg-6 col-md-9">[[${#temporals.format(user.birthday, 'MM-dd-yyyy')}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Số Điện Thoại</label>
+						<div class="col-lg-6 col-md-9">[[${user.phoneNumber}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Địa Chỉ</label>
+						<div class="col-lg-6 col-md-9">[[${user.address}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label"></label>
+						<a class="form-control col-lg-6 col-md-9" type="text"
+							th:href="@{/information?action=edit}"
+							style="width: 150px; text-align: center; background-color: rgb(128, 128, 255); border: none;">
+							Sửa thông tin 
+						</a>
+						<a class="form-control col-lg-6 col-md-9" type="text"
+							th:href="@{/change-password}"
+							style="width: 150px; text-align: center; 
+								background-color: rgb(128, 128, 255); border: none;
+								margin-left: 20px">
+							Đổi mật khẩu
+						</a>
+						<a class="form-control col-lg-6 col-md-9" type="text"
+							th:href="@{/bill}"
+							style="width: 160px; text-align: center; 
+								background-color: rgb(128, 128, 255); border: none;
+								margin-left: 20px">
+							Lịch sử mua hàng
+						</a>
+					</div>
+
+					<br> <br>
+				</div>
+				<div class="col-md-12" th:if="${edit}">
+					<header>
+						<h1>Hồ Sơ Của Tôi</h1>
+						<div class="content">Quản lý thông tin hồ sơ để bảo mật tài
+							khoản</div>
+					</header>
+					<hr>
+					<form th:action="@{'/information/'+*{id}}" method="post" th:object="${user}">
+					<div class="row">
+						<label class="col-md-3 control-label">Tên</label>
+						<div class="col-lg-6 col-md-9">
+							<input type="text" th:field="*{lastName}">
+							<input type="text" th:field="*{firstName}">
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Email </label>
+						<div class="col-lg-6 col-md-9">[[${user.email}]]</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Giới tính</label>
+						<div class="col-lg-6 col-md-9">
+							<select class="form-control" th:field="*{gender}">
+							    <option th:each="gender : ${T(com.example.clientcomputer.model.enums.EGender).values()}" 
+        							th:value="${gender}" th:text="${gender}"></option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Ngày sinh</label>
+						<div class="col-lg-6 col-md-9">
+							<input type="date" th:field="*{birthday}" th:value="*{birthday}"/>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Số Điện Thoại</label>
+						<div class="col-lg-6 col-md-9">
+							<input type="text" th:field="*{phoneNumber}">
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label">Địa Chỉ</label>
+						<div class="col-lg-6 col-md-9">
+							<textarea cols="50" rows="3" th:field="*{address}"></textarea>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<label class="col-md-3 control-label"></label>
+						<button class="form-control col-lg-6 col-md-9"
+							style="width: 150px; text-align: center; background-color: gray; border: none;">
+							Sửa thông tin 
+						</button>
+					</div>
+					</form>
+					<br> <br>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /SECTION -->
+
+	<!-- NEWSLETTER -->
+	<div th:replace="common/web/footer::newsletter"></div>
+	<!-- /NEWSLETTER -->
+
+	<!-- FOOTER -->
+	<footer th:replace="common/web/footer::footer"></footer>
+
+	<!-- /FOOTER -->
+
+	<div th:replace="common/web/head::script"></div>
+</body>
+</html>

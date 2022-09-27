@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="thymeleaf.org">
+<head th:replace="common/web/head::head('Information')">
+</head>
+<body>
+	<!-- HEADER -->
+	<header th:replace="common/web/header::header"></header>
+	<!-- /HEADER -->
+
+	<!-- NAVIGATION -->
+	<nav id="navigation" th:replace="common/web/navigation::navigation">
+	</nav>
+	<!-- /NAVIGATION -->
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Trang thông tin</h3>
+					<ul class="breadcrumb-tree">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li class="active">Chi tiết đơn hàng</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- SECTION -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-lg-12 my-4 mt-3 mb-3 card content"
+					style="border: 1px solid rgba(214, 214, 214, 0.493); min-height: 600px;">
+					<h5>
+						<a th:href="@{/bill}"><i class="fa fa-arrow-left"></i>Trở lại</a>
+					</h5>
+					<div class="row m-5">
+						<h3>Chi tiết đơn hàng có mã [[${IDDH}]]</h3>
+						<table class="table table-bordered">
+							<thead>
+								<tr class="text-center">
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Đơn giá</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="item : ${billDetails}">
+									<td th:text="${item.productName}"></td>
+									<td width="10%" class="text-center" th:text="${item.quantity}"></td>
+									<td width="15%" class="text-center"
+										th:text="${#numbers.formatDecimal(item.price.longValue(), 3,
+											'COMMA', 0, 'DEFAULT')}+ ' VNĐ'"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /SECTION -->
+
+	<!-- NEWSLETTER -->
+	<div th:replace="common/web/footer::newsletter"></div>
+	<!-- /NEWSLETTER -->
+
+	<!-- FOOTER -->
+	<footer th:replace="common/web/footer::footer"></footer>
+
+	<!-- /FOOTER -->
+
+	<div th:replace="common/web/head::script"></div>
+</body>
+</html>

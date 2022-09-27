@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+<head th:replace="common/admin/fragment::head('Thêm sản phẩm')">
+</head>
+<body>
+	<div id="app">
+		<!-- Menu -->
+		<div th:replace="common/admin/fragment::menu"></div>
+		<!--/ End Menu -->
+		<div id="main">
+			<!-- Header -->
+			<nav th:replace="common/admin/header::header"></nav>
+			<!--/ End Header -->
+			<div class="gap-sm"></div>
+			<form action="./admin-product-add" method="post"
+				enctype="multipart/form-data" th:object="${product}">
+				<div class="detail-product">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 ">
+									<div class="alert alert-${alert}" th:if="${message}" role="alert">[[${message}]]</div>
+								<div class="card">
+									<div class="card-header">
+										<h4 class="title-form title-product">
+											Thông tin cơ bản <span class="span-title-product">*</span>
+										</h4>
+									</div>
+									<div class="card-body">
+										<input type="hidden" class="form-control" name="name" th:field="*{id}"
+													placeholder="Nhập tên sản phẩm..." required="required">
+										<div class="row row-margin-top">
+											<div class="col-lg-2 col-md-4 col-6">
+												<p>
+													Tên sản phẩm: <span class="span-title-product">*</span>
+												</p>
+											</div>
+											<div class="col-lg-10 col-md-8 col-6">
+												<input type="text" class="form-control" name="name" th:field="*{name}"
+													placeholder="Nhập tên sản phẩm..." required="required">
+											</div>
+										</div>
+
+										<div class="gap-sm"></div>
+										<div class="row ">
+
+											<div class="col-lg-2 col-md-4 col-6">
+												<p>Hình ảnh sản phẩm:</p>
+											</div>
+											<div class="col-lg-10 col-md-8 col-6">
+													<div class="form-group">
+														<input type="file" class="form-control-file"
+															name="image_link" multiple id="exampleFormControlFile1">
+													</div>
+											</div>
+										</div>
+										<div class="gap-sm"></div>
+										<div class="row">
+											<div class="col-lg-2 col-md-4 col-6">
+												<p>
+													Chi tiết sản phẩm <span class="span-title-product">*</span>
+												</p>
+											</div>
+											<div class="col-lg-10 col-md-8 col-6">
+												<textarea class="form-control" id="3" rows="4" name="content" th:field="*{description}"
+													placeholder="Nhập mô tả sản phẩm..." required="required"></textarea>
+											</div>
+										</div>
+
+										<div class="gap-sm"></div>
+										<div class="row">
+											<div class="col-lg-2 col-md-4 col-6">
+												<p>Danh mục sản phẩm:</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-4">
+												<select class="form-control" id="sel1" th:field="*{categoryId}">
+												    <option th:each="cate : ${categories}" th:value="${cate.id}" th:text="${cate.name}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="gap-sm"></div>
+										<div class="row">
+											<div class="col-lg-2 col-md-2 col-2">
+												<p>
+													Giá bán <span class="span-title-product">*</span>
+												</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-4">
+												<input type="number" class="form-control" th:field="*{price}"
+													min="0" placeholder="Nhập giá bán..." required="required">
+											</div>
+										</div>
+
+										<div class="gap-sm"></div>
+										<!-- <div class="row">
+											<div class="col-lg-2 col-md-2 col-6">
+												<p>Số lượng nhập</p>
+											</div>
+											<div class="col-lg-4 col-md-4 col-6">
+												<input type="number" class="form-control" min="0" name="qty" th:field="*{quantity}"
+													placeholder="Nhập số lượng sản phẩm nhập...">
+											</div>
+										</div> -->
+
+										<div class="gap-sm"></div>
+										<div class="row">
+											<div class="col-12" style="text-align: center;">
+												<button class="btn btn-outline-primary" type="submit"
+													style="padding-left: 1.2rem; padding-right: 1.2rem; margin-right: 40px;">Lưu</button>
+												<a href="./admin-product">
+													<button type="button" class="btn btn-outline-danger">Thoát</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div th:replace="common/admin/fragment::script"></div>
+	
+	<script type="text/javascript">
+		var price = $("#price").val();
+		$("#price").attr("value", Number(price));
+	</script>
+</body>
+</html>

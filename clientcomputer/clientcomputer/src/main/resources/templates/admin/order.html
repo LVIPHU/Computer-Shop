@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/admin/fragment::head('Danh sách đơn hàng')"></head>
+<body>
+	<div id="app">
+		<!-- Menu -->
+		<div th:replace="common/admin/fragment::menu"></div>
+		<!--/ End Menu -->
+		<div id="main">
+			<!-- Header -->
+			<nav th:replace="common/admin/header::header"></nav>
+			<!--/ End Header -->
+
+
+			<div class="gap-sm"></div>
+
+			<form action="./admin-order" method="post">
+
+				<div class="info-product">
+					<div class="container-fluid">
+						<div class="row ">
+							<div class="col-lg-12 col-md-12 ">
+								<div class="card">
+									<div class="alert alert-${alert}" th:if="${message }"
+										role="alert">[[${message}]]</div>
+									<div class="card-body">
+										<div class="row row-margin-top">
+											<div class="container-fluid">
+												<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+
+													<li class="nav-item"><a class="nav-link active"
+														id="all-tab" data-toggle="tab" href="#all" role="tab"
+														aria-controls="all" aria-selected="true">Tất cả</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="waitcofirm-tab" data-toggle="tab" href="#waitcofirm"
+														role="tab" aria-controls="waitcofirm"
+														aria-selected="false">Chờ xác nhận</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="confirm-tab" data-toggle="tab" href="#confirmed"
+														role="tab" aria-controls="confirmed"
+														aria-selected="false">Đã xác nhận</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="paid-tab" data-toggle="tab" href="#paid"
+														role="tab" aria-controls="paid" 
+														aria-selected="false">Đã thanh toán</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="complete-tab" data-toggle="tab" href="#complete"
+														role="tab" aria-controls="complete" 
+														aria-selected="false">Đã giao</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="canceled-tab" data-toggle="tab" href="#canceled"
+														role="tab" aria-controls="canceled"
+														aria-selected="false">Đã hủy</a></li>
+													<!-- <li class="nav-item"><a class="nav-link"
+														href="./admin-return">Trả hàng & Hoàn tiền</a></li> -->
+												</ul>
+
+												<div class="tab-content" id="myTabContent">
+													<div class="tab-pane fade show active" id="all"
+														role="tabpanel" aria-labelledby="all-tab">
+														<!-- tất cả đơn hàng -->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text" id="basic-addon"><i
+																				class="fa fa-search" aria-hidden="true"></i> </span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																							<th></th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<td><a
+																								th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																							</a></td>
+																							<td>[[${bill.receivedAddress}]]</td>
+																							<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																							<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																							<td>[[${bill.note}]]</td>
+																							<td>
+																								<div th:switch="${bill.status.name()}">
+																									<span th:case="'DRAFT'" 
+																										class="badge bg-warning">Chờ xác nhận</span>
+																									<span th:case="'CONFIRMED'"
+																										class="badge bg-primary">Đã xác nhận</span>
+																									<span th:case="'PAID'" 
+																										class="badge bg-info">Đã thanh toán</span>
+																									<span th:case="'COMPLETED'"
+																										class="badge bg-success">Đã giao</span>
+																									<span th:case="'CANCELED'" 
+																										class="badge bg-danger">Đã hủy</span> 
+																									<span th:case="*" class="badge bg-danger">Không trạng thái</span>
+																								</div>
+																							</td>
+																							<td>
+																								<th:block th:unless="${bill.status.name() == 'COMPLETED' || bill.status.name() =='CANCELED'}">
+																									<a th:href="@{'/admin/admin-order-approve/'+${bill.id}}+'?statusBill='+${bill.status}">
+																										<button type="button" class="btn btn-outline-success btn-sm">
+																											<i class="ti-check" aria-hidden="true"></i>
+																										</button>
+																									</a>
+																								</th:block>
+																							</td>
+																							<td th:if="${bill.status.name() == 'DRAFT'}">
+																								<a th:href="@{'/admin/admin-order-cancel/'+${bill.id}}">
+																									<button type="button" class="btn btn-outline-danger btn-sm">
+																											<i class="ti-close"></i>
+																									</button>
+																								</a>
+																							</td>
+																							<td th:unless="${bill.status.name() == 'DRAFT'}">
+																							</td>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="tab-pane fade" id="waitcofirm" role="tabpanel"
+														aria-labelledby="waitcofirm-tab">
+														<!-- Chờ xác nhận -->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text"><i
+																				class="fa fa-search" aria-hidden="true"></i></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																							<th></th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<th:block th:if="${bill.status.name() == 'DRAFT'}">
+																								<td><a
+																									th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																								</a></td>
+																								<td>[[${bill.receivedAddress}]]</td>
+																								<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																								<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																								<td>[[${bill.note}]]</td>
+																								<td>
+																									<div>
+																										<span class="badge bg-warning">Chờ xác nhận</span>
+																									</div>
+																								</td>
+																								<td>
+																									<a th:href="${'./admin-order-edit?id='+{bill.id}}">
+																										<button type="button" class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button>
+																									</a>
+																								</td>
+																								<td th:if="${bill.status.name() == 'CANCELED'}">
+																									<a th:href="${'./admin-order-delete?id='+{bill.id}}">
+																										<button type="button" class="btn btn-outline-danger btn-sm">
+																												<i class="ti-trash"></i>
+																										</button>
+																									</a>
+																								</td>
+																								<td th:unless="${bill.status.name() == 'CANCELED'}">
+																								</td>
+																							</th:block>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="confirmed" role="tabpanel"
+														aria-labelledby="confirm-tab">
+														<!-- Đã xác nhận-->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text"><i
+																				class="fa fa-search" aria-hidden="true"></i></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<th:block th:if="${bill.status.name() == 'CONFIRMED'}">
+																								<td><a
+																									th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																								</a></td>
+																								<td>[[${bill.receivedAddress}]]</td>
+																								<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																								<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																								<td>[[${bill.note}]]</td>
+																								<td>
+																									<div>
+																										<span class="badge bg-primary">Đã xác nhận</span>
+																									</div>
+																								</td>
+																								<td>
+																									<a th:href="@{'/admin/admin-order-approve/'+${bill.id}}+'?statusBill='+${bill.status}">
+																										<button type="button" class="btn btn-outline-success btn-sm">
+																											<i class="ti-check" aria-hidden="true"></i>
+																										</button>
+																									</a>
+																								</td>
+																							</th:block>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+													
+													<div class="tab-pane fade" id="paid" role="tabpanel"
+														aria-labelledby="paid-tab">
+														<!-- Đã thanh toán -->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text"><i
+																				class="fa fa-search" aria-hidden="true"></i></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<th:block th:if="${bill.status.name() == 'PAID'}">
+																								<td><a
+																									th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																								</a></td>
+																								<td>[[${bill.receivedAddress}]]</td>
+																								<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																								<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																								<td>[[${bill.note}]]</td>
+																								<td>
+																									<div>
+																										<span class="badge bg-info">Đã thanh toán</span>
+																									</div>
+																								</td>
+																								<td>
+																									<a th:href="@{'/admin/admin-order-approve/'+${bill.id}}+'?statusBill='+${bill.status}">
+																										<button type="button" class="btn btn-outline-success btn-sm">
+																											<i class="ti-check" aria-hidden="true"></i>
+																										</button>
+																									</a>
+																								</td>
+																							</th:block>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+													
+													<div class="tab-pane fade" id="complete" role="tabpanel"
+														aria-labelledby="complete-tab">
+														<!-- Đã giao -->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text"><i
+																				class="fa fa-search" aria-hidden="true"></i></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<th:block th:if="${bill.status.name() == 'COMPLETED'}">
+																								<td><a
+																									th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																								</a></td>
+																								<td>[[${bill.receivedAddress}]]</td>
+																								<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																								<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																								<td>[[${bill.note}]]</td>
+																								<td>
+																									<div>
+																										<span class="badge bg-secondary">Đã giao</span>
+																									</div>
+																								</td>
+																							</th:block>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="tab-pane fade" id="canceled" role="tabpanel"
+														aria-labelledby="canceled-tab">
+														<!-- Đã hủy -->
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-lg-3 col-md-3 col-sm-5 col-5">
+																	<div class="input-group mb-3">
+																		<input type="text" class="form-control"
+																			placeholder="Tìm mã đơn hàng..."
+																			aria-label="Recipient's username"
+																			aria-describedby="basic-addon2">
+																		<div class="input-group-append">
+																			<span class="input-group-text"><i
+																				class="fa fa-search" aria-hidden="true"></i></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-1 col-md-1 "></div>
+																<!-- <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+																	<div class="container-fluid">
+																		<div class="row">
+																			<div class="col-lg-2 col-md-2">
+																				<p style="margin-top: 10px;">Ngày đặt hàng</p>
+																			</div>
+																			<div class="col-lg-3 col-md-3col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-1 col-md-1">
+																				<i class="fa fa-arrow-right" aria-hidden="true"
+																					style="margin-left: 20px; margin-top: 15px;"></i>
+																			</div>
+																			<div class="col-lg-3 col-md-3 col-sm-6 col-6">
+																				<div class="form-group row">
+																					<div class="col-12">
+																						<input class="form-control" type="datetime-local"
+																							value="2011-08-19T13:45:00">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-lg-3 col-md-3">
+																				<button class="btn btn-primary">
+																					<i class="fa fa-print" aria-hidden="true"
+																						style="color: white !important;"></i> In hóa đơn
+																				</button>
+																			</div>
+																		</div>
+																	</div>
+																</div> -->
+																<div class="col-lg-1 col-md-1 "></div>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<h3 style="color: black;">Đơn hàng</h3>
+															</div>
+															<div class="gap-xs"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped'>
+																					<thead>
+																						<tr>
+																							<th>Mã đơn hàng</th>
+																							<th>Địa chỉ nhận hàng</th>
+																							<th>Tổng tiền</th>
+																							<th>Ngày đặt hàng</th>
+																							<th>Ghi chú</th>
+																							<th>Trạng thái</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<tr th:each="bill: ${bills}">
+																							<th:block th:if="${bill.status.name() == 'CANCELED'}">
+																								<td><a
+																									th:href="${'./admin-order-detail?id='+{bill.id}}">[[${bill.id}]]
+																								</a></td>
+																								<td>[[${bill.receivedAddress}]]</td>
+																								<td>[[${#numbers.formatDecimal(bill.amount.longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+																								<td>[[${#temporals.format(bill.createDate, 'dd-MM-yyyy HH:mm')}]]</td>
+																								<td>[[${bill.note}]]</td>
+																								<td>
+																									<div>
+																										<span class="badge bg-danger">Đã hủy</span> 
+																									</div>
+																								</td>
+																							</th:block>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div th:replace="common/admin/fragment::script"></div>
+
+</body>
+
+</html>

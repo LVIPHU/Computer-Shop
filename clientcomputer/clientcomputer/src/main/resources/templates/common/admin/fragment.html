@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="thymeleaf.org">
+<head th:fragment="head(title)">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${title}]]</title>
+<!--css-->
+<link
+	href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+<link th:href="@{/admin/css2/flex-slider.min.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/jquery.fancybox.min.css}"
+	rel="stylesheet" type="text/css" media="all" />
+<link th:href="@{/admin/css2/jquery-ui.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/magnific-popup.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/nice-select.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/one-page-wonder.min.css}"
+	rel="stylesheet" type="text/css" media="all" />
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link th:href="@{/admin/css2/bootstrap.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/font-awesome.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/themify-icons.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/animate.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/owl-carousel.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/slicknav.min.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/style1.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/responsive.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link th:href="@{/admin/css2/style-login.css}" rel="stylesheet"
+	type="text/css" media="all" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/admin/css/bootstrap.css}" />
+<link rel="stylesheet" th:href="@{/admin/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/admin/vendors/chartjs/Chart.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/admin/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf}" />
+<link rel="stylesheet"
+	th:href="@{/admin/fonts/font-awesome-4.7.0/css/font-awesome.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/admin/vendors/perfect-scrollbar/perfect-scrollbar.css}" />
+<link rel="stylesheet" th:href="@{/admin/css/app.css}" />
+<link rel="stylesheet" th:href="@{/admin/css/style.css}" />
+
+</head>
+<body>
+
+	<div th:fragment="menu" th:remove="tag">
+		<div id="sidebar" class='active'>
+			<div class="sidebar-wrapper active">
+				<div class="sidebar-header">
+					<a href="/admin/"> <img src="/admin/images/logo2.png" alt=""
+						class="img-logo" style="max-width: -webkit-fill-available">
+					</a>
+				</div>
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="fa fa-clipboard"
+								aria-hidden="true" style="font-size: 18px;"></i> <span>Thống
+									Kê</span>
+						</a>
+							<ul class="submenu">
+								<li><a href="/admin/admin-sales/time/">Doanh thu theo tháng</a></li>
+								<li><a href="/admin/admin-sales/product">Doanh thu sản phẩm</a></li>
+								<!-- <li><a href="/admin/admin-product-add">Thống kê nhập hàng</a></li> -->
+							</ul>
+						</li>
+						<li class="sidebar-item"><a href="/admin/admin-order"
+							class='sidebar-link'> <i class="fa fa-inbox"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Đơn
+									hàng</span>
+						</a>
+						</li>
+						<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="fa fa-cubes"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Sản
+									phẩm</span>
+						</a>
+							<ul class="submenu">
+								<li><a href="/admin/admin-product">Danh sách sản phẩm</a></li>
+								<li><a href="/admin/admin-product-add">Thêm sản phẩm</a></li>
+								<li><a href="/admin/admin-product-import">Nhập hàng</a></li>
+							</ul></li>
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'> <i class="fa fa-users"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Tài
+									khoản</span>
+						</a>
+							<ul class="submenu">
+								<li><a href="/admin/admin-account">Danh sách tài khoản</a></li>
+								<li><a href="/admin/admin-account-add">Thêm tài khoản</a></li>
+							</ul></li>
+						<li class="sidebar-item"><a href="/admin/admin-category"
+							class='sidebar-link'> <i class="fa fa-server"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Danh mục</span>
+						</a>
+						</li>
+						<!-- <li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'> <i class="fa fa-newspaper-o"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Tin
+									tức</span>
+						</a>
+							<ul class="submenu">
+								<li><a href="/admin-news-add">Thêm tin
+									tức</a></li>
+								<li><a href="/admin-news-edit">Sửa tin
+									tức</a></li>
+								<li><a href="/admin-news-delete">Xóa tin
+									tức</a></li>
+							</ul></li>
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'> <i class="fa fa-envelope-o"
+								aria-hidden="true" style="font-size: 16px;"></i> <span>Tin
+									nhắn</span>
+						</a>
+							<ul class="submenu">
+								<li><a href="/admin-message-view">Xem tin
+									nhắn</a></li>
+								<li><a href="/admin-message-reply">Phản
+									hồi tin nhắn </a></li>
+							</ul></li> -->
+					</ul>
+				</div>
+				<button class="sidebar-toggler btn x">
+					<i data-feather="x"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div th:fragment="script" th:remove="tag">
+		<script type="text/javascript" th:src="@{/admin/js2/jquery.min.js}"></script>
+		<script th:src="@{/admin/js2/jquery-migrate-3.0.0.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/jquery-ui.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/popper.min.js}" type="text/javascript"></script>
+		<script th:src="@{/admin/js2/bootstrap.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/slicknav.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/owl-carousel.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/magnific-popup.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/waypoints.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/finalcountdown.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/nicesellect.js}" type="text/javascript"></script>
+		<script th:src="@{/admin/js2/flex-slider.js}" type="text/javascript"></script>
+		<script th:src="@{/admin/js2/scrollup.js}" type="text/javascript"></script>
+		<script th:src="@{/admin/js2/onepage-nav.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/admin/js2/easing.js}" type="text/javascript"></script>
+		<script th:src="@{/admin/js2/active.js}" type="text/javascript"></script>
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnhgNBg6jrSuqhTeKKEFDWI0_5fZLx0vM"></script>
+		<script th:src="@{/admin/js2/jquery.twbsPagination.min.js}"
+			type="text/javascript"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/js/feather-icons/feather.min.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/vendors/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+		<script type="text/javascript" th:src="@{/admin/js/app.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/vendors/chartjs/Chart.min.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/vendors/apexcharts/apexcharts.min.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/js/bootstrap.min.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/admin/js/pages/dashboard.js}"></script>
+		<script type="text/javascript" th:src="@{/admin/js/main.js}"></script>
+		<script type="text/javascript" th:src="@{/admin/js/import.js}"></script>
+	</div>
+</body>
+</html>

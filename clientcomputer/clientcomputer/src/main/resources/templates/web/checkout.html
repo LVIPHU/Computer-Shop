@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+<head th:replace="common/web/head::head(Checkout)"></head>
+<body>
+	<!-- HEADER -->
+	<header th:replace="common/web/header::header"></header>
+	<!-- /HEADER -->
+
+	<!-- NAVIGATION -->
+	<nav id="navigation" th:replace="common/web/navigation::navigation"></nav>
+	<!-- /NAVIGATION -->
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Thanh toán</h3>
+					<ul class="breadcrumb-tree">
+						<li><a href="/">Trang chủ</a></li>
+						<li class="active">Thanh toán</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- SECTION -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<form th:action="@{/checkout/vnpay}" id="form-bill-user" th:object="${bill}" method="post">
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Thông tin đặt hàng</h3>
+							</div>
+
+							<div class="form-group">
+								<input class="input" type="text" th:value="${user.firstName}"
+									placeholder="First Name">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" th:value="${user.lastName}"
+									placeholder="Last Name">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="receivedAddress"
+									th:value="${user.address}" placeholder="Address">
+							</div>
+							<div class="form-group">
+								<input class="input" type="tel" name="receivedPhoneNo"
+									th:value="${user.phoneNumber}" placeholder="Telephone">
+							</div>
+							<div class="order-notes">
+								<textarea class="input" placeholder="Order Notes" th:field="*{note}"
+									style="resize: none"></textarea>
+							</div>
+						</div>
+						<!-- /Billing Details -->
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 order-details">
+
+						<div class="section-title text-center">
+							<h3 class="title">Đơn hàng của bạn</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div>
+									<strong>Sản phẩm</strong>
+								</div>
+								<div>
+									<strong>Thành tiền</strong>
+								</div>
+							</div>
+							<div class="order-products">
+								<div class="order-col" th:each="cart : ${carts}">
+									<div>[[${cart.quantity}+'x '+ ${cart.productName}]]</div>
+									<div>[[${#numbers.formatDecimal((cart.price*cart.quantity),
+										1, 'DEFAULT', 0, 'DEFAULT')}+ ' VNĐ']]</div>
+								</div>
+							</div>
+
+							<div class="order-col">
+								<div>
+									<strong>Tổng cộng</strong>
+								</div>
+								<div>
+									<input type="hidden" name="amount" th:value="${amount}">
+									<strong class="order-total">[[${#numbers.formatDecimal(amount,
+										1, 'DEFAULT', 0, 'DEFAULT')}+ ' VNĐ']]</strong>
+								</div>
+							</div>
+						</div>
+						<div class="payment-method">
+							<div class="input-radio">
+								<input type="radio" name="payment" value="COD" id="payment-1" checked="checked"> 
+									<label for="payment-1"> <span></span> <i class="fa fa-money"></i> Tiền mặt </label>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" value="BT" id="payment-2">
+									 <label for="payment-2"> <span></span> <i class="fa fa-credit-card"></i> VNPAY</label>
+							</div>
+						</div>
+						<div class="input-checkbox">
+							<input type="checkbox" id="terms"> <label for="terms">
+								<span></span> I've read and accept the <a href="#">terms &
+									conditions</a>
+							</label>
+						</div>
+						<button class="primary-btn order-submit">Place
+							order</button>
+
+					</div>
+					<!-- /Order Details -->
+				</form>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /SECTION -->
+
+	<!-- NEWSLETTER -->
+	<div id="newsletter" class="section"
+		th:replace="common/web/footer::newsletter"></div>
+	<!-- /NEWSLETTER -->
+
+	<!-- FOOTER -->
+	<footer id="footer" th:replace="common/web/footer::footer"></footer>
+	<!-- /FOOTER -->
+
+	<!-- jQuery Plugins -->
+	<div th:replace="common/web/head::script"></div>
+	
+	<script type="text/javascript">
+	$('#payment-2').on('click', checkPayment());
+	function checkPayment(){
+		if(document.getElementById('payment-2').checked){
+			console.log("checked vnpay")
+			document.getElementById('form-bill-user').action = "/checkout/vnpay"
+		}else{
+			document.getElementById('form-bill-user').action = "/checkout"
+		}
+	}
+	</script>
+
+</body>
+</html>

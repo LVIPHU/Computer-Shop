@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+
+<head th:replace="common/admin/fragment::head('Danh mục sản phẩm')"></head>
+<body>
+	<div id="app">
+		<!-- Menu -->
+		<div th:replace="common/admin/fragment::menu"></div>
+		<!--/ End Menu -->
+		<div id="main">
+			<!-- Header -->
+			<nav th:replace="common/admin/header::header"></nav>
+			<!--/ End Header -->
+			<div class="gap-sm"></div>
+				<div class="info-product">
+					<div class="container-fluid">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-12">
+									<section class="section">
+										<div class="card">
+											<div class="alert alert-${alert}" th:if="${message}"
+												role="alert">[[${message}]]</div>
+											<div class="card-body">
+											<div class="text-left">
+											    <a class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalCategoryForm">
+											    	Thêm danh mục
+											    </a>
+											</div>
+											<!-- Modal -->
+											<div class="modal fade" id="modalCategoryForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+										       aria-hidden="true">
+										    <div class="modal-dialog" role="document">
+										      <div class="modal-content">
+										        <div class="modal-header text-center">
+										          <h4 class="modal-title w-100 font-weight-bold">Thêm Danh mục</h4>
+										          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										            <span aria-hidden="true">&times;</span>
+										          </button>
+										        </div>
+										        <form action="./admin-category" method="post" th:object="${categoryNew}">
+											        <div class="modal-body mx-3">
+											          <div class="form-group">
+									                    <label class="col-sm-4 control-label"
+									                              for="categoryName">Tên Danh Mục </label>
+									                    <div class="col-sm-12">
+									                        <input type="text" class="form-control" th:field="*{name}"
+									                        id="categoryName" placeholder="Danh mục"/>
+									                    </div>
+									                </div>
+											        </div>
+											        <div class="modal-footer d-flex justify-content-center">
+											          <button type="submit" class="btn btn-indigo">Tạo</button>
+											        </div>
+										        </form>
+										      </div>
+										    </div>
+										  </div>
+											<!-- End modal -->
+												<table class='table table-striped' id="table1">
+													<thead>
+														<tr>
+															<th style="text-align: center;">Mã danh mục</th>
+															<th style="text-align: center;">Tên danh mục</th>
+															<th style="text-align: center;">Số sản phẩm</th>
+															<th style="text-align: center;">Trạng thái</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														<th:block th:each="cate : ${categories}">
+															<tr>
+																<td style="text-align: center;">
+																	<a href="./admin-product-edit?id=${cate.id}">[[${cate.getId()}]]
+																	</a>
+																</td>
+																<td style="text-align: center;">
+																	<a href="/.admin-product-edit?id=${cate.id}">[[${cate.getName()}]]
+																	</a>
+																</td>
+																<td style="text-align: center;">[[${cate.productNo}]]</td>
+																<td style="text-align: center;">
+																	<span class="badge bg-secondary" th:unless="${cate.productNo>0}">
+																		Không chứa sản phẩm
+																	</span>
+																	<span class="badge bg-success" th:if="${cate.productNo>0}">Chứa sản phẩm</span>
+																</td>
+																<td>
+																	<a href="./admin-category-edit?id=${cate.id}">
+																		<button type="button"
+																			class="btn btn-outline-success btn-sm">
+																			<i class="ti-pencil"></i>
+																		</button>
+																	</a>
+																</td>
+																<td th:if="qty[s.count]==0">
+																	<a href="./admin-category-delete?id=${cate.id}">
+																		<button type="button"
+																			class="btn btn-outline-danger btn-sm">
+																			<i class="ti-trash"></i>
+																		</button>
+																	</a>
+																</td>
+															</tr>
+														</th:block>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+
+	<div th:replace="common/admin/fragment::script"></div>
+</body>
+
+</html>

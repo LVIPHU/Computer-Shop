@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+<head th:replace="common/admin/fragment::head('Danh sách sản phẩm')">
+</head>
+
+<body>
+	<div id="app">
+		<div th:replace="common/admin/fragment::menu"></div>
+
+		<div id="main">
+			<nav th:replace="common/admin/header::header"></nav>
+
+			<div class="gap-sm"></div>
+
+			<form action="/admin-product" method="post">
+				<div class="info-product">
+					<div class="container-fluid">
+						<div class="row ">
+							<div class="col-lg-12 col-md-12 ">
+								<div class="card">
+									<div class="alert alert-${alert}" th:if="${message}"
+										role="alert">[[${message}]]</div>
+									<div class="card-body">
+										<div class="row row-margin-top">
+											<div class="container-fluid">
+												<ul class="nav nav-tabs" id="myTab" role="tablist">
+													<li class="nav-item"><a class="nav-link active"
+														id="home-tab" data-toggle="tab" href="#home" role="tab"
+														aria-controls="home" aria-selected="true">Tất Cả</a></li>
+													<!-- <li class="nav-item"><a class="nav-link"
+														id="online-tab" data-toggle="tab" href="#online"
+														role="tab" aria-controls="online" aria-selected="false">
+															Còn Hàng</a></li>
+													<li class="nav-item"><a class="nav-link"
+														id="soldout-tab" data-toggle="tab" href="#soldout"
+														role="tab" aria-controls="soldout" aria-selected="false">Hết
+															Hàng</a></li> -->
+													<li class="nav-item"><a class="nav-link"
+														href="./admin-product-add">Thêm Sản Phẩm</a></li>
+												</ul>
+												<div class="tab-content" id="myTabContent">
+													<div class="tab-pane fade show active" id="home"
+														role="tabpanel" aria-labelledby="home-tab">
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			<!-- all product-tab -->
+																			<div class="card-body">
+																				<table class='table table-striped' id="table1">
+																					<thead>
+																						<tr>
+																							<th>Tên sản phẩm</th>
+																							<th>Nhãn hiệu</th>
+																							<th>Giá</th>
+																							<th>Số lượng tồn</th>
+																							<th>Trạng thái</th>
+																							<th></th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<th:block th:each="prod : ${products}">
+																							<tr>
+																								<td width=60%><a
+																									th:href="@{'admin-product-edit?id='+${prod.id}}">[[${prod.name}]]
+																								</a></td>
+																								<td>[[${prod.categoryName}]]</td>
+																								<td>[[${#numbers.formatDecimal(prod.price.longValue(),
+																									1, 'DEFAULT', 2, 'DEFAULT')}]]₫</td>
+																								<td>[[${prod.quantity}]]</td>
+																								<td><span class="badge bg-danger"
+																									th:if="${prod.quantity}==0">Hết hàng</span> <span
+																									class="badge bg-success"
+																									th:unless="${prod.quantity}==0">Còn hàng</span>
+																								</td>
+																								<td><a
+																									th:href="@{'admin-product-edit?id='+${prod.id}}">
+																										<button type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button>
+																								</a></td>
+																								<td><a
+																									th:href="@{'admin-product-delete/'+${prod.id}}">
+																										<button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button>
+																								</a></td>
+																							</tr>
+																						</th:block>
+																					</tbody>
+																				</table>
+																				<div class="row">
+																					<div class="pagination justify-content-end">
+																						<a th:if="${totalPages > 0}"
+																							th:each="pageNumber : ${pageNumbers}"
+																							th:href="@{/admin/admin-product(page=${pageNumber})}"
+																							th:text=${pageNumber}
+																							th:class="${pageNumber==(currentPage + 1)} ? 'page-link page-item disabled m-0' : 'page-item page-link m-0'"></a>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div>
+													<!-- <div class="tab-pane fade" id="online" role="tabpanel"
+														aria-labelledby="online-tab">
+														<div class="container-fluid">
+															<div class="gap-sm"></div>
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			all product-tab
+																			<div class="card-body">
+																				<table class='table table-striped' id="table1">
+																					<thead>
+																						<tr>
+																							<th>Tên sản phẩm</th>
+																							<th>SKU phân loại</th>
+																							<th>Giá</th>
+																							<th>Số lượng tồn</th>
+																							<th>Trạng thái</th>
+
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<c:if test="${not empty pagedListHolder}">
+																							<c:forEach items="${pagedListHolder.pageList}"
+																								var="p">
+																								<c:if test="${p.getQty() > 0}">
+																									<tr>
+																										<td><a
+																											href="
+																											/admin-product-edit?id=${p.getId()} " />">${p.getName()}
+																											</a></td>
+																										<td>${p.getCatalog_id()}</td>
+																										<td>${p.getPrice()}₫</td>
+																										<td>${p.getQty()}</td>
+																										<td><c:choose>
+																												<c:when test="${p.getQty() == 0}">
+																													<span class="badge bg-danger">Hết
+																														hàng</span>
+																												</c:when>
+																												<c:otherwise>
+																													<span class="badge bg-success">Còn
+																														hàng</span>
+																												</c:otherwise>
+																											</c:choose></td>
+																										<td><a
+																											href="
+																											/admin-product-edit?id=${p.getId()} " />">
+																											<button type="button"
+																												class="btn btn-outline-success btn-sm">
+																												<i class="ti-folder"></i>
+																											</button> </a></td>
+
+																										<td><a
+																											href="
+																											/admin-product-delete?action=xoa&id=${p.getId()} " />">
+																											<button type="button"
+																												class="btn btn-outline-danger btn-sm">
+																												<i class="ti-trash"></i>
+																											</button> </a></td>
+																									</tr>
+																								</c:if>
+																							</c:forEach>
+																						</c:if>
+																					</tbody>
+																				</table>
+																				<div>
+																					<tg:paging pagedListHolder="${pagedListHolder}"
+																						pagedLink="${pagedLink}" />
+																				</div>
+																			</div>
+																		</div>
+
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div> -->
+													<!-- <div class="tab-pane fade" id="soldout" role="tabpanel"
+														aria-labelledby="soldout-tab">
+														<div class="container-fluid">
+															<div class="row">
+																<div class="col-12">
+																	<section class="section">
+																		<div class="card">
+																			all product-tab
+																			<div class="card-body">
+																				<table class='table table-striped' id="table1">
+																					<thead>
+																						<tr>
+																							<th>Tên sản phẩm</th>
+																							<th>SKU phân loại</th>
+																							<th>Giá</th>
+																							<th>Số lượng tồn</th>
+																							<th>Trạng thái</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<c:if test="${not empty pagedListHolder}">
+																					<c:forEach items="${pagedListHolder.pageList}" var="p">
+																						<c:if test="${p.getQty() == 0}">
+																							<tr>
+																								<td><a
+																									href="/admin-product-edit?id=${p.getId()}"/>">${p.getName()}
+																								</a></td>
+																								<td>${p.getCatalog_id()}</td>
+																								<td>${p.getPrice()}₫</td>
+																								<td>${p.getQty()}</td>
+																								<td><c:choose>
+																										<c:when test="${p.getQty() == 0 }">
+																											<span class="badge bg-danger">Hết hàng</span>
+																										</c:when>
+																										<c:otherwise>
+																											<span class="badge bg-success">Còn
+																												hàng</span>
+																										</c:otherwise>
+																									</c:choose></td>
+																								<td><a
+																									href="/admin-product-edit?id=${p.getId()}"/>"><button
+																											type="button"
+																											class="btn btn-outline-success btn-sm">
+																											<i class="ti-folder"></i>
+																										</button></a></td>
+																								<td><a href="/admin-product-delete?action=xoa&id=${p.getId()}"/>"><button type="button"
+																											class="btn btn-outline-danger btn-sm">
+																											<i class="ti-trash"></i>
+																										</button></a></td>
+																							</tr>
+																						</c:if>
+																					</c:forEach>
+																				</c:if>
+																						<tr>
+																							<td>CPU - AMD Threadripper™ 3970X Socket
+																								sTRX4/128MB/3.7Ghz/32 nhân 64 luồng</td>
+																							<td>CPUAMDS3970</td>
+																							<td>4,190,000₫</td>
+																							<td>23</td>
+																							<td><span class="badge bg-warning">Bị
+																									tạm khóa</span></td>
+																						</tr>
+																						<tr>
+																							<td>CPU - Core i7 9700 / 12M / 3.0GHz upto
+																								4.70GHz / 8 nhân 8 luồng</td>
+																							<td>CPUITI79100</td>
+																							<td>1,190,000₫</td>
+																							<td>04</td>
+																							<td><span class="badge bg-warning">Bị
+																									tạm khóa</span></td>
+																						</tr>
+																						<tr>
+																							<td>Mainboard - ASROCK H310CM HDV/M2</td>
+																							<td>MBASRH310</td>
+																							<td>5,190,000₫</td>
+																							<td>45</td>
+																							<td><span class="badge bg-warning">Bị
+																									tạm khóa</span></td>
+																						</tr>
+																						<tr>
+																							<td>RAM - (4GB DDR4 1x4G 2400) Ram G.skill
+																								Ripjaws Laptop</td>
+																							<td>RAM4X22400</td>
+																							<td>9,190,000₫</td>
+																							<td>93</td>
+																							<td><span class="badge bg-warning">Bị
+																									tạm khóa</span></td>
+																						</tr>
+																					</tbody>
+																				</table>
+																				<div>
+																			<tg:paging pagedListHolder="${pagedListHolder}"
+																				pagedLink="${pagedLink}" />
+																		</div>
+																			</div>
+																		</div>
+																	</section>
+																</div>
+															</div>
+														</div>
+													</div> -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div th:replace="common/admin/fragment::script"></div>
+</body>
+
+</html>

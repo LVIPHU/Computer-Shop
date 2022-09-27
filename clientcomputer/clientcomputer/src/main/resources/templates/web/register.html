@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="thymeleaf.org">
+<head th:replace="common/web/head::head(Login)">
+</head>
+<body>
+	<header th:replace="common/web/header::header"></header>
+
+	<div class="container">
+		<div id="signupbox" style="margin-top: 50px"
+			class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<div class="panel-title">Đăng ký</div>
+					<div
+						style="float: right; font-size: 85%; position: relative; top: -10px">
+						<a id="signinlink" th:href="@{/login}">Đăng nhập</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<form id="signupform" class="form-horizontal" role="form"
+						action="signup" method="post" th:object="${userSignup}">
+						<div id="signupalert" style="display: none"
+							class="alert alert-danger">
+							<p>Error:</p>
+							<span></span>
+						</div>
+						<div class="form-group">
+							<label for="email" class="col-md-3 control-label">Email</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="email"
+									th:field="*{email}" placeholder="Nhập email ...">
+								<div class="alert alert-warning" style="margin-bottom: 0px" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="firstname" class="col-md-3 control-label">Tên</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="firstname"
+									th:field="*{firstName}" placeholder="Nhập tên ...">
+								<div class="alert alert-warning" style="margin-bottom: 0px" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="lastname" class="col-md-3 control-label">Họ</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="lastname"
+									th:field="*{lastName}" placeholder="Nhập họ ...">
+								<div class="alert alert-warning" style="margin-bottom: 0px" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-md-3 control-label">Mật khẩu</label>
+							<div class="col-md-9">
+								<input type="password" class="form-control" name="passwd"
+									th:field="*{password}" placeholder="Nhập mật khẩu ...">
+								<div class="alert alert-warning" style="margin-bottom: 0px" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="phone" class="col-md-3 control-label">Số điện thoại</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="phone"
+									th:field="*{phoneNumber}" placeholder="Nhập số điện thoại ...">
+								<div class="alert alert-warning" style="margin-bottom: 0px" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-offset-3 col-md-9">
+								<button id="btn-signup" type="submit" class="btn btn-info">
+									<i class="icon-hand-right"></i> &nbsp; Đăng ký
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="common/web/footer::footer"></footer>
+
+	<div th:replace="common/web/head::script"></div>
+</body>
+</html>

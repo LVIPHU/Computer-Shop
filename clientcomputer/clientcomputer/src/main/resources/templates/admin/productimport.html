@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+<head th:replace="common/admin/fragment::head('Danh sách sản phẩm')">
+</head>
+<style type="text/css">
+#myInput {
+	background-image: url('/css/searchicon.png');
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	width: 100%;
+	font-size: 16px;
+	padding: 12px 20px 12px 40px;
+	border: 1px solid #ddd;
+	margin-bottom: 12px;
+}
+</style>
+
+<body>
+	<div id="app">
+		<div th:replace="common/admin/fragment::menu"></div>
+
+		<div id="main">
+			<nav th:replace="common/admin/header::header"></nav>
+
+			<div class="gap-sm"></div>
+
+			<form action="/admin/admin-product-import" method="post"
+				th:object="${import}">
+				<div class="info-product">
+					<div class="container-fluid">
+						<div class="row ">
+							<div class="col-lg-12 col-md-12 ">
+								<div class="card w-75 mx-auto">
+									<div class="alert alert-${alert}" th:if="${message}"
+										role="alert">[[${message}]]</div>
+									<div class="card-body ">
+										<h1 align="center">Phiếu nhập</h1>
+										<div class="form-row">
+											<div class="form-group col-md-4 mx-auto">
+												<label for="inputEmail4">Người nhập</label>
+												<input type="hidden" name="userId" th:value="${userId}">
+												<p class="form-control">[[${session.userMail}]]
+											</div>
+											<div class="form-group col-md-4 mx-auto">
+												<label for="inputPassword4">Ngày </label>
+												<p class="form-control" id="datetime">
+											</div>
+										</div>
+										<div class="form-group col-md-10 mx-auto">
+											<label for="inputNote">Ghi chú</label>
+											<textarea class="form-control" id="inputNote"
+												placeholder="Ghi chú" th:field="*{note}"></textarea>
+										</div>
+										<br>
+										<button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModalCenter">
+											Thêm sản phẩm
+										</button> 
+<!-- 										<input type="text" id="myInput" -->
+<!-- 											onkeyup="myFunction()" placeholder="Tìm kiếm sản phẩm... " -->
+<!-- 											title="Nhập tên sản phẩm"> -->
+										<table class="table table-bordered" id="tableImport">
+											<thead>
+												<tr>
+													<th width="1%">#</th>
+													<th width="75%">Tên sản phẩm</th>
+													<th width="12%">Đơn giá</th>
+													<th width="12%">Số lượng</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+											</tbody>
+										</table>
+										<button type="submit" class="btn btn-primary">Tạo phiếu</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Danh sách sản phẩm</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table id="productTable" class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Tên sản phẩm</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="product, idx : ${products}">
+								<td>
+									<input type="hidden" name="productId" th:value="${product.id}">
+									<span th:text="${product.name}"></span>
+								</td>
+								<td>
+									<button type="button" class="btn btn-success">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+										<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+										</svg>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul class="pagination justify-content-center" style="margin:20px 0; cursor: pointer;">
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="common/admin/fragment::script"></div>
+	<script>
+		var today = new Date();
+		var date = today.getDate() + '-' + (today.getMonth() + 1) + '-'
+				+ today.getFullYear();
+		var dateTime = date;
+		document.getElementById("datetime").innerHTML = dateTime;
+
+		//search talbe
+		function myFunction() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("tableImport");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="thymeleaf.org">
+
+<head th:replace="common/admin/fragment::head('Trang chủ')"></head>
+
+<body>
+	<div id="app">
+		<div th:replace="common/admin/fragment::menu"></div>
+
+		<div id="main">
+			<nav th:replace="common/admin/header::header"></nav>
+
+			<div class="gap-sm"></div>
+
+			<div class="main-content container-fluid">
+				<div class="page-title">
+					<h3>DOANH THU</h3>
+				</div>
+				<section class="section">
+					<div class="row mb-4">
+						<div class="col-md-12 colg-12 col-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class='card-heading p-1 pl-3'>Bán Hàng</h3>
+								</div>
+								<div class="form-inline mx-auto mt-3">
+									<div class="form-group">
+										<label for="startDate" class="col-sm-2 col-form-label">Từ</label>
+										<input data-date-format="mm/yyyy" type="date"
+											class="form-control" id="startDate" placeholder="First name">
+									</div>
+									<div class="form-group">
+										<label for="endDate" class="col-sm-2 col-form-label">Đến</label>
+										<input data-date-format="mm/yyyy" type="date"
+											class="form-control" id="endDate" placeholder="Last name">
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="row m-5">
+										<table class="table table-hover table-bordered"
+											id="tableSaleTime">
+											<thead>
+												<tr>
+													<th class="font-weight-bold" scope="col">Tháng năm</th>
+													<th class="font-weight-bold" scope="col">Tổng tiền</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="s, idx : ${sales}">
+													<td>[[${s[0]}]]</td>
+													<td>[[${#numbers.formatDecimal(s[1].longValue(), 1, 'DEFAULT', 0, 'DEFAULT')}]]₫</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<div th:replace="common/admin/fragment::script"></div>
+
+</body>
+
+<script type="text/javascript">
+	
+	$('#endDate').on('blur', function(){
+		const startDate = $('#startDate').val();
+		const endDate = $('#endDate').val();
+		console.log(startDate + endDate)
+		if(!isEmpty(startDate) && !isEmpty(endDate)){
+			$.ajax({
+				type : "GET",
+				url : "http://localhost:8081/api/report/time",
+				header : {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Authorization' : '[[${session.token}]]',
+					'Accept': 'application/vnd.realtime247.sct-giro-v1+cms',
+				    'Access-Control-Allow-Origin': 'http://localhost:8081',
+				    'Access-Control-Allow-Methods': 'GET',
+				    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type'
+				},
+				data : {
+					startDate: startDate,
+					endDate: endDate
+				},
+				success: function(response){
+			        $('#tableSaleTime tbody').empty();
+			        // add table rows
+			        $.each(response.content, (i, report) => {
+			          console.log(report)
+			          let noteRow = '<tr>'+
+										'<td>'+report[0]+'</td>'+
+										'<td>'+report[1]+' ₫</td>'+
+									  '</tr>';
+			          $('#tableSaleTime tbody').append(noteRow);
+			        });
+			    },
+			    error : function(e) {
+			        alert("ERROR: ", e);
+			        console.log("ERROR: ", e);
+			    }
+			})
+		}
+	})
+	
+	function isEmpty(val){
+    	return (val === undefined || val == null || val.length <= 0) ? true : false;
+	}
+</script>
+
+</html>
